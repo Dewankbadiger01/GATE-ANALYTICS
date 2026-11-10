@@ -1,0 +1,23 @@
+[
+  {
+    "questionCode": "GATE-CS-2025-Q1",
+    "year": 2025,
+    "examBranch": "CS",
+    "questionNo": 1,
+    "subject": "Algorithms",
+"topic": "Searching and Sorting",
+    "questionText": "REPLACE WITH THE VERIFIED QUESTION TEXT",
+    "questionType": "MCQ",
+    "difficulty": "EASY",
+    "marks": 1,
+    "options": [
+      { "label": "A", "text": "Option A text" },
+      { "label": "B", "text": "Option B text" },
+      { "label": "C", "text": "Option C text" },
+      { "label": "D", "text": "Option D text" }
+    ],
+    "answer": "A",
+    "explanation": "REPLACE WITH VERIFIED EXPLANATION",
+    "source": "REPLACE WITH SOURCE URL OR REFERENCE"
+  }
+]

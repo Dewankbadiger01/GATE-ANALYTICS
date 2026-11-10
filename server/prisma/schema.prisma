@@ -1,0 +1,96 @@
+
+generator client {
+  provider               = "prisma-client"
+  output                 = "../generated/prisma"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum QuestionType {
+  MCQ
+  MSQ
+  NAT
+}
+
+model Subject {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  code      String     @unique
+  topics    Topic[]
+  questions Question[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Topic {
+  id        String     @id @default(cuid())
+  name      String
+  subjectId String
+  subject   Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  questions Question[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@unique([name, subjectId])
+  @@index([subjectId])
+}
+
+model Question {
+  id           String       @id @default(cuid())
+  questionCode String       @unique
+  year         Int
+  examBranch   String       @default("CS")
+  questionNo   Int
+  questionText String       @db.Text
+  questionType QuestionType
+  difficulty   Difficulty   @default(MEDIUM)
+  marks        Float        @default(1)
+  subjectId    String
+  topicId      String
+  subject      Subject      @relation(fields: [subjectId], references: [id])
+  topic        Topic        @relation(fields: [topicId], references: [id])
+  options      Option[]
+  answer       Answer?
+  explanation  String?      @db.Text
+  source       String?
+  isVerified   Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([year])
+  @@index([examBranch])
+  @@index([subjectId])
+  @@index([topicId])
+  @@index([difficulty])
+  @@index([year, examBranch])
+}
+
+model Option {
+  id         String   @id @default(cuid())
+  label      String
+  text       String   @db.Text
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, label])
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  value      String   @db.Text
+  questionId String   @unique
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  explanation String? @db.Text
+  isVerified Boolean  @default(false)
+}
